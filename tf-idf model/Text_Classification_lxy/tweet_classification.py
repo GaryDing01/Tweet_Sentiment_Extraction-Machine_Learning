@@ -90,6 +90,7 @@ if __name__ == "__main__":
     print(len(X_train), len(X_test))
     # step3 提取特征参数（tf-idf）len(feature_name) == 21491
     X_train_tfidf, X_test_tfidf, tfidf_model, feature_name = calculate_tfidf(X_train, X_test)
+    # Read: sparse.load_npz('file_path')
     sparse.save_npz('feature/X_train_tfidf.npz', X_train_tfidf)
     sparse.save_npz('feature/X_test_tfidf.npz', X_test_tfidf)
     # step4 训练模型
