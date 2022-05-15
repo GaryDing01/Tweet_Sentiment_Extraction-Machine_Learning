@@ -16,6 +16,8 @@ from sklearn.model_selection import GridSearchCV
 from nltk.corpus import stopwords
 import joblib
 import pandas as pd
+import numpy as np
+from scipy import sparse
 
 def read_data(data_path):
     """
@@ -79,23 +81,18 @@ if __name__ == "__main__":
     data_path = "./data/train.csv"
     # data: text,selected_text,sentiment 27481
     data, features, targets = read_data(data_path)
+    print(len(data))
     # print(targets)
 
     # step2 分词、分为训练集和测试集
-    test_size = 0.1
+    test_size = 0.3
     X_train, X_test, y_train, y_test = sklearn.model_selection.train_test_split(data, targets, test_size=test_size, random_state=1028)
-
+    print(len(X_train), len(X_test))
     # step3 提取特征参数（tf-idf）len(feature_name) == 21491
     X_train_tfidf, X_test_tfidf, tfidf_model, feature_name = calculate_tfidf(X_train, X_test)
-
+    sparse.save_npz('feature/X_train_tfidf.npz', X_train_tfidf)
+    sparse.save_npz('feature/X_test_tfidf.npz', X_test_tfidf)
     # step4 训练模型
-
-    penaltys = ['l1', 'l2']
-    Cs = [0.1, 1, 10, 100, 1000]
-    # 调优的参数集合，搜索网格为2x5，在网格上的交叉点进行搜索
-    tuned_parameters = dict(penalty=penaltys, C=Cs)
-
-
     # 99.82 41.99
     clf = LogisticRegression(solver='liblinear', C=10, penalty='l2')
 
