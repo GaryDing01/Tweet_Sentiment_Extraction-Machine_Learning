@@ -4,6 +4,7 @@
 @Filetype: tweet_classification.py
 @Time: 2022/5/8:13:59
 """
+# PCA，IODA
 import jieba
 import re
 import csv
@@ -34,7 +35,8 @@ def read_data(data_path):
         for item in reader:
             if reader.line_num == 1:
                 continue
-            text = re.sub('[^A-Za-z]+', ' ', item[1])
+            text = item[1].lower()
+            text = re.sub('[^A-Za-z]+', ' ', text)
             data.append(''.join([word+'' '' for word in text.split() if word not in StopWords]))
             features.append(item[2])
             targets.append(item[3])
@@ -95,11 +97,11 @@ if __name__ == "__main__":
     sparse.save_npz('feature/X_test_tfidf.npz', X_test_tfidf)
     # step4 训练模型
     # 99.82 41.99
-    clf = LogisticRegression(solver='liblinear', C=10, penalty='l2')
+    # clf = LogisticRegression(penalty='l2')
 
     # 99.82 41.99
     # clf = tree.DecisionTreeClassifier()
-    # clf = svm.SVC()
+    clf = svm.SVC()
 
     clf.fit(X_train_tfidf, y_train)
     # step5 模型评估
