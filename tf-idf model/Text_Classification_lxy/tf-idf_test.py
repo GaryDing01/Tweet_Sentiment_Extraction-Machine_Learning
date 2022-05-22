@@ -4,6 +4,7 @@
 @Filetype: tweet_classification.py
 @Time: 2022/5/8:13:59
 """
+# 70%
 # PCA，IODA
 import jieba
 import re
@@ -58,11 +59,11 @@ if __name__ == "__main__":
     # 99.82 41.99
     # clf = LogisticRegression(penalty='l2')
 
-    # clf = RandomForestClassifier(n_estimators=100)
+    clf = RandomForestClassifier(n_estimators=100)
 
     # 99.82 41.99
     # clf = tree.DecisionTreeClassifier()
-    clf = svm.SVC()
+    # clf = svm.SVC()
 
     clf.fit(X_train_tfidf, y_train)
     # step5 模型评估
