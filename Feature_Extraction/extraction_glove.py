@@ -11,8 +11,13 @@ import numpy as np
 from mittens import GloVe
 import pickle
 import datetime
+import copy
 
 from vocab_creation import Vocab
+from utils import MaxMinNormalization,list2csv
+
+from sklearn.decomposition import PCA
+# from sklearn.preprocessing import MinMaxScaler
 
 
 # # 一个小例子
@@ -92,18 +97,94 @@ def create_cooccurrence(data, coWindow=3, tableSize=1000):
     return cooccurrence
 
 
-if __name__ == "__main__":
-    lines, corpus, vocab = load_vocab()
-    print('len(corpus):',len(corpus))
-    print('len(vocab):',len(vocab))
-    cooccurrence=create_cooccurrence(corpus,tableSize=len(vocab))
-    print('About cooccurrence:',cooccurrence.shape)
-
-    max_iter=200         # 最大迭代次数
-    display_progress=1000   # 每次展示
-    glove_model = GloVe(n=cooccurrence.shape[0], max_iter=max_iter, display_progress=display_progress)
+# 使用GloVe生成词向量
+def complete_glove2vec(cooccurrence, max_iter=300):
+    # n=cooccurrence.shape[0]
+    vec_len=int(8.33*np.log10(cooccurrence.shape[0]))+1
+    glove_model = GloVe(n=vec_len, max_iter=max_iter)
+    # 保存模型
+    with open('./glove.data', 'wb') as file:
+        pickle.dump(glove_model, file)
+    print('保存模型成功！')
     # 模型训练与结果输出
     embeddings = glove_model.fit(cooccurrence)
-    print('embeddings:')
-    print(embeddings)
-    print(embeddings.shape)
+    # print('\nembeddings:')
+    # print(embeddings)
+    # print(embeddings.shape)
+
+    # 保存glove模型，返回embeddings结果
+    return embeddings
+
+# 拼成特征矩阵
+def create_featureMatrix(corpus,embeddings,pca_components=30):
+    # 先按照词向量创建特征列表
+    feaL=[[] for i in range(len(corpus))]
+    vec_len=embeddings.shape[1]
+
+    for i in range(len(feaL)):
+        for j in range(len(corpus[i])):
+            feaL[i].append(list(embeddings[corpus[i][j]]))
+
+    def calc_meanlist(l1):
+        l2=[]
+        a1=np.array(l1).T
+        # print(a1.shape)
+        for i in range(a1.shape[0]):
+            l2.append(np.mean(a1[i]))
+        return l2
+
+    print('在这里测试')
+    feaS=[[] for i in range(len(corpus))]
+    for i in range(len(feaL)):
+        feaS[i]+=calc_meanlist(feaL[i])
+    list2csv('firstversion.csv',feaS)
+
+    feaM=np.array(feaS)
+    print(feaM.shape)
+    # print(feaM)
+    exit()
+
+    # 此时每一个样本特征数量不一样，需要进行特征选择
+    # !!!需要标记选出来的特征原来是来自哪个词的
+    # # 进行归一化
+    # scalar=MinMaxScaler()
+    # feaN=scalar.fit_transform(feaL)
+
+    # 只能自己进行归一化
+    for item in feaL:
+        item=MaxMinNormalization(item)
+
+    print(feaL)
+    print(len(feaL))
+    print(len(feaL[0]))
+    print('小测试')
+    for item in feaL:
+        print(len(item))
+
+    # # PCA降维
+    # pca = PCA(n_components=pca_components)  # 主成分数量为2，方便可视化
+    # for item in feaL:
+    #     item=pca.fit_transform([item])[0]
+    # print('测试')
+    # print(feaL)
+    # print(len(feaL))
+    # print(len(feaL[0]))
+
+
+
+if __name__ == "__main__":
+    lines, corpus, vocab = load_vocab()
+    print('len(lines):', len(lines))
+    print('len(corpus):',len(corpus))
+    print('len(vocab):',len(vocab))
+    print(lines)
+    # # print("corpus:",corpus)
+    # # exit()
+    # cooccurrence=create_cooccurrence(corpus,tableSize=len(vocab))
+    # print('\nAbout cooccurrence:',cooccurrence.shape)
+    # # print('cooccurrence:')
+    # # print(cooccurrence)
+    #
+    # embeddings=complete_glove2vec(cooccurrence)
+    # print()
+    # create_featureMatrix(corpus,embeddings)
