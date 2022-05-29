@@ -15,6 +15,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn import svm, tree
 from sklearn.feature_extraction.text import TfidfVectorizer
 from sklearn.ensemble import RandomForestClassifier
+from random_forest import RandomForest
 from sklearn.model_selection import GridSearchCV
 from nltk.corpus import stopwords
 import joblib
@@ -36,9 +37,7 @@ def calculate_tfidf(X_train, X_test):
     # X_train_tfidf就是测试数据的特征矩阵
     X_train_tfidf = vectorizer.transform(X_train)
     X_test_tfidf = vectorizer.transform(X_test)
-    # print(X_test_tfidf.toarray())
     feature_name = vectorizer.get_feature_names()
-    # print(len(X_test), X_test_tfidf.shape)
     return X_train_tfidf, X_test_tfidf, vectorizer, feature_name
 
 if __name__ == "__main__":
@@ -51,6 +50,7 @@ if __name__ == "__main__":
 
     # step3 提取特征参数（tf-idf）len(feature_name) == 21491
     X_train_tfidf, X_test_tfidf, tfidf_model, feature_name = calculate_tfidf(X_train, X_test)
+
     # Read: sparse.load_npz('file_path')
     # sparse.save_npz('feature/X_train_tfidf.npz', X_train_tfidf)
     # sparse.save_npz('feature/X_test_tfidf.npz', X_test_tfidf)
@@ -59,8 +59,8 @@ if __name__ == "__main__":
     # 99.82 41.99
     # clf = LogisticRegression(penalty='l2')
 
-    clf = RandomForestClassifier(n_estimators=100)
-
+    # clf = RandomForestClassifier(n_estimators=100, max_features=30)
+    clf = RandomForest(tree_num=100)
     # 99.82 41.99
     # clf = tree.DecisionTreeClassifier()
     # clf = svm.SVC()
