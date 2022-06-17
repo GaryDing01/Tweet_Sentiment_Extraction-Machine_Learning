@@ -4,7 +4,7 @@
 @Filetype: app.py.py
 @Time: 2022/6/17:11:17
 """
-from flask import Flask, json, request
+from flask import Flask, json, request, jsonify
 from flask_cors import CORS
 import json
 import configparser
@@ -44,19 +44,19 @@ def get_info():
 
 @app.route('/get_result', methods=['GET', 'POST'])
 def get_result():
-    # file = request.files.get('test1.csv')
-    file_name = 'test1.csv'
-    file_path = os.path.join('data', file_name)
+    file = request.files.get('file')
+    filename = file.filename
+    file_path = os.path.join('data', filename)
+    file.save(file_path)
     data = get_data_from_csv(file_path)
     model = Model('tfidf', 'LogisticRegression')
     result = model.get_result(data)
     print(result)
     response = {
-        'code': 0,
-        'result': result
+        "result": result
     }
-    return json.dumps(response)
-
+    # return json.dumps(response, ensure_ascii=False)
+    return jsonify(response)
 @app.route('/open', methods=['post'])
 def set_info():
     req = json.loads(request.data)

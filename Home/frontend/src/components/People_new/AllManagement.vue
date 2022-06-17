@@ -106,7 +106,7 @@ import SidePer from '@/components/People_new/SidePer';
           alert("请求失败!");
         });
     },
-    
+
     //判断授权
     //点击员工信息按钮
     showAuth_Info(){
@@ -159,7 +159,7 @@ import SidePer from '@/components/People_new/SidePer';
     // 机器学习测试
     getData() {
       // 设置对应python的接口，这里使用的是localhost:5000
-      const path = 'http://127.0.0.1:5000/open';
+      const path = 'http://127.0.0.1:5000/get_result';
       axios.get(path).then(res => {
         // 这里服务器返回response为一个json对象
         // 通过.data来访返回的数据，然后在通过.变量名进行访问
@@ -176,7 +176,7 @@ import SidePer from '@/components/People_new/SidePer';
     // 机器学习测试
     getData1() {
       // 设置对应python的接口，这里使用的是localhost:5000
-      const path = 'http://127.0.0.1:5000/open';
+      const path = 'http://127.0.0.1:5000/get_result';
       this.$axios.get(path).then(res => {
         // 这里服务器返回response为一个json对象
         // 通过.data来访返回的数据，然后在通过.变量名进行访问
@@ -209,12 +209,15 @@ import SidePer from '@/components/People_new/SidePer';
       this.loading=true;
       var that=
       this;
-      that.$axios.post("http://127.0.0.1:5000/open",formData,config).then(function(response){
+      that.$axios.post("http://127.0.0.1:5000/get_result",formData,config).then(function(response){
         that.loading=false;
+        console.log(response)
         alert(response.status)
         if(response.status===200){
-          that.tableData=(JSON.parse(response.data))
-          that.total=that.tableData.length
+          // that.tableData=(JSON.parse(response.data))
+          that.tableData=response.data
+          alert(that.tableData.result)
+          // that.total=that.tableData.length
         }
       }).catch(err =>{
         this.$message.error(err.message);
@@ -231,7 +234,7 @@ import SidePer from '@/components/People_new/SidePer';
 .empInfo_but{
     width:200px;
     height:200px;
-    
+
     /* position:absolute;
     left:300px;
     top:30px; */
@@ -244,7 +247,7 @@ import SidePer from '@/components/People_new/SidePer';
 .empSal_but{
     width:200px;
     height:200px;
-    
+
     /* position:absolute;
     left:300px; */
     margin-left:20px;
