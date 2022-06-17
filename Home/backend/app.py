@@ -30,12 +30,15 @@ def get_result1():
     filename = file.filename
     file_path = os.path.join('data', filename)
     file.save(file_path)
-    data = get_data_from_csv(file_path)
+    data, ground_truth, origin = get_data_from_csv(file_path)
     model = Model('tfidf', 'LogisticRegression')
     result = model.get_result(data)
-    print(result)
+    accuracy = calculate_accuracy(result, ground_truth)
     response = {
-        "result": result
+        "result": result,
+        "text": origin,
+        "ground": ground_truth,
+        "accuracy": accuracy
     }
     # return json.dumps(response, ensure_ascii=False)
     return jsonify(response)
@@ -46,12 +49,15 @@ def get_result2():
     filename = file.filename
     file_path = os.path.join('data', filename)
     file.save(file_path)
-    data = get_data_from_csv(file_path)
+    data, ground_truth, origin = get_data_from_csv(file_path)
     model = Model('tfidf', 'RandomForestClassifier')
     result = model.get_result(data)
-    print(result)
+    accuracy = calculate_accuracy(result, ground_truth)
     response = {
-        "result": result
+        "result": result,
+        "text": origin,
+        "ground": ground_truth,
+        "accuracy": accuracy
     }
     # return json.dumps(response, ensure_ascii=False)
     return jsonify(response)
@@ -62,12 +68,15 @@ def get_result3():
     filename = file.filename
     file_path = os.path.join('data', filename)
     file.save(file_path)
-    data = get_data_from_csv(file_path)
+    data, ground_truth, origin = get_data_from_csv(file_path)
     model = Model('count', 'LogisticRegression')
     result = model.get_result(data)
-    print(result)
+    accuracy = calculate_accuracy(result, ground_truth)
     response = {
-        "result": result
+        "result": result,
+        "text": origin,
+        "ground": ground_truth,
+        "accuracy": accuracy
     }
     # return json.dumps(response, ensure_ascii=False)
     return jsonify(response)
@@ -78,12 +87,15 @@ def get_result4():
     filename = file.filename
     file_path = os.path.join('data', filename)
     file.save(file_path)
-    data = get_data_from_csv(file_path)
+    data, ground_truth, origin = get_data_from_csv(file_path)
     model = Model('count', 'RandomForestClassifier')
     result = model.get_result(data)
-    print(result)
+    accuracy = calculate_accuracy(result, ground_truth)
     response = {
-        "result": result
+        "result": result,
+        "text": origin,
+        "ground": ground_truth,
+        "accuracy": accuracy
     }
     # return json.dumps(response, ensure_ascii=False)
     return jsonify(response)
