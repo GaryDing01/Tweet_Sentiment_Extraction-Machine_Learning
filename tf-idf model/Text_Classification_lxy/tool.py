@@ -28,6 +28,7 @@ def read_data(data_path):
                 continue
             # text = BeautifulSoup(item[1]).get_text()
             text = item[1].lower()
+            text = re.sub('https?://\S+|www\.\S+', '', text)
             text = re.sub('[^A-Za-z]+', ' ', text)
             data.append(''.join([word + ' ' for word in text.split() if word not in StopWords]))
             features.append(item[2])

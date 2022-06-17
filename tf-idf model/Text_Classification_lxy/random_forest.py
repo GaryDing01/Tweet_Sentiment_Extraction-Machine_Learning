@@ -34,8 +34,6 @@ class RandomForest(object):
                 else:
                     samples = np.row_stack((samples, x_train[int(bootstrapping[i])].toarray()))
                 labels.append(y_train[int(bootstrapping[i])])
-            print('samples: ', samples)
-            print('labels: ',labels)
             self.trees[tree_index].fit(samples, labels)
         print('random forest fit finish')
 
@@ -63,7 +61,6 @@ class RandomForest(object):
             if final_result[i] == y_test[i]:
                 correct_sample_num = correct_sample_num + 1
         return correct_sample_num / len(y_test)
-
 
 
 

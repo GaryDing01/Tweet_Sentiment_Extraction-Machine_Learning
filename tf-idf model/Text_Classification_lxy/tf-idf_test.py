@@ -10,6 +10,7 @@ import jieba
 import re
 import csv
 import sys
+import time
 import sklearn
 from sklearn.linear_model import LogisticRegression
 from sklearn import svm, tree
@@ -40,7 +41,7 @@ def calculate_tfidf(X_train, X_test):
     feature_name = vectorizer.get_feature_names()
     return X_train_tfidf, X_test_tfidf, vectorizer, feature_name
 
-if __name__ == "__main__":
+def main():
     # step1 读取数据（文本和停用词）
     data_path = "./data/train.csv"
     # data: text,selected_text,sentiment 27481
@@ -59,7 +60,7 @@ if __name__ == "__main__":
     # 99.82 41.99
     # clf = LogisticRegression(penalty='l2')
 
-    # clf = RandomForestClassifier(n_estimators=100, max_features=30)
+    # clf = RandomForestClassifier(n_estimators=100)
     clf = RandomForest(tree_num=100)
     # 99.82 41.99
     # clf = tree.DecisionTreeClassifier()
@@ -72,3 +73,12 @@ if __name__ == "__main__":
 
     accuracy = evaluate(clf, X_test_tfidf, y_test)
     print("测试集正确率：%.4f%%\n" % (accuracy * 100))
+
+if __name__ == "__main__":
+    start = time.clock()
+
+    main()
+    # lxy_random_forest()
+
+    end = time.clock()
+    print('execute time: ', (end - start))
