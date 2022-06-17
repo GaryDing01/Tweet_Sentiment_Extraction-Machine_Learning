@@ -2,3 +2,4 @@
 *Home/frontend/.idea
 *tf-idf model/Text_Classification_lxy/.idea
 *.idea
+*Home/backend/model/tfidf_model

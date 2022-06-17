@@ -42,7 +42,9 @@ def lxy_random_forest():
 def main():
     data_path = "./data/train.csv"
     data, features, targets = read_data(data_path)
-    vectorizer = CountVectorizer(analyzer='word', tokenizer=None, preprocessor=None, stop_words=None, max_features=5000)
+    # vectorizer = CountVectorizer(analyzer='word', tokenizer=None, preprocessor=None, stop_words=None, max_features=5000)
+    vectorizer = joblib.load(filename='model/count_model/vectorizer.model')
+    # joblib.dump(filename="model/count_model/vectorizer.model", value=vectorizer)
     # all_feature = vectorizer.fit_transform(data)
     # all_feature = all_feature.toarray()
     # print(all_feature.shape)
@@ -60,9 +62,10 @@ def main():
     print('Start training')
     # clf = LogisticRegression(penalty='l2')
     # clf = RandomForest(tree_num=100)
-    clf = svm.SVC()
-    # forest = RandomForestClassifier(n_estimators=100)
+    # clf = svm.SVC()
+    clf = RandomForestClassifier(n_estimators=100)
     clf = clf.fit(train_feature, y_train)
+    joblib.dump(filename="model/count_model/RandomForestClassifier.model", value=clf)
     # joblib.dump(filename='model/forest_count_vectorizer.model', value=forest)
     print('Start testing')
     test_feature = vectorizer.transform(X_test)
@@ -74,8 +77,8 @@ if __name__ == '__main__':
 
     start = time.clock()
 
-    # main()
-    lxy_random_forest()
+    main()
+    # lxy_random_forest()
 
     end = time.clock()
     print('execute time: ', (end - start))

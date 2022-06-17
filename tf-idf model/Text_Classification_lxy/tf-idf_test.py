@@ -50,8 +50,10 @@ def main():
     X_train, X_test, y_train, y_test = divide_set(data, targets, 0.3)
 
     # step3 提取特征参数（tf-idf）len(feature_name) == 21491
-    X_train_tfidf, X_test_tfidf, tfidf_model, feature_name = calculate_tfidf(X_train, X_test)
-
+    # X_train_tfidf, X_test_tfidf, tfidf_model, feature_name = calculate_tfidf(X_train, X_test)
+    vectorizer = joblib.load('model/vectorizer.model')
+    X_train_tfidf = vectorizer.transform(X_train)
+    X_test_tfidf = vectorizer.transform(X_test)
     # Read: sparse.load_npz('file_path')
     # sparse.save_npz('feature/X_train_tfidf.npz', X_train_tfidf)
     # sparse.save_npz('feature/X_test_tfidf.npz', X_test_tfidf)
@@ -61,12 +63,14 @@ def main():
     # clf = LogisticRegression(penalty='l2')
 
     # clf = RandomForestClassifier(n_estimators=100)
-    clf = RandomForest(tree_num=100)
+    # clf = RandomForest(tree_num=100)
     # 99.82 41.99
-    # clf = tree.DecisionTreeClassifier()
+    clf = tree.DecisionTreeClassifier()
     # clf = svm.SVC()
 
     clf.fit(X_train_tfidf, y_train)
+    joblib.dump(filename="model/DecisionTree.model", value=clf)
+    # sys.exit(0)
     # step5 模型评估
     accuracy = evaluate(clf, X_train_tfidf, y_train)
     print("训练集正确率：%.4f%%\n" % (accuracy * 100))

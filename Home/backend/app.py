@@ -9,6 +9,8 @@ from flask_cors import CORS
 import json
 import configparser
 import os
+from tool import *
+from models import Model
 
 # configuration
 DEBUG = True
@@ -40,6 +42,20 @@ def get_info():
 
     return json.dumps(response, ensure_ascii=False)
 
+@app.route('/get_result', methods=['GET', 'POST'])
+def get_result():
+    # file = request.files.get('test1.csv')
+    file_name = 'test1.csv'
+    file_path = os.path.join('data', file_name)
+    data = get_data_from_csv(file_path)
+    model = Model('tfidf', 'LogisticRegression')
+    result = model.get_result(data)
+    print(result)
+    response = {
+        'code': 0,
+        'result': result
+    }
+    return json.dumps(response)
 
 @app.route('/open', methods=['post'])
 def set_info():
