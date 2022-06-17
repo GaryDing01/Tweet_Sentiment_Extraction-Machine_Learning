@@ -23,27 +23,9 @@ app.config.from_object(__name__)
 CORS(app, resource={r'/*': {'origins': '*'}})
 
 # sanity check route
-@app.route('/open', methods=['get'])
-def get_info():
-    # cp = configparser.ConfigParser()
-    # cur_path = os.getcwd()
-    # cp.read(cur_path + '/server/cc.cfg')
-    # sections = cp.sections()
-    response = {
-        'code': 0,
-        'data': {}
-    }
-    # if len(sections) == 0:
-    #     raise Exception('文件不存在或无内容')
-    # for section in sections:
-    #     response['data'][section] = {}
-    #     for key in cp[section]:
-    #         response['data'][section][key] = cp.get(section, key)
 
-    return json.dumps(response, ensure_ascii=False)
-
-@app.route('/get_result', methods=['GET', 'POST'])
-def get_result():
+@app.route('/get_result_tfidf_l', methods=['GET', 'POST'])
+def get_result1():
     file = request.files.get('file')
     filename = file.filename
     file_path = os.path.join('data', filename)
@@ -57,16 +39,54 @@ def get_result():
     }
     # return json.dumps(response, ensure_ascii=False)
     return jsonify(response)
-@app.route('/open', methods=['post'])
-def set_info():
-    req = json.loads(request.data)
 
+@app.route('/get_result_tfidf_r', methods=['GET', 'POST'])
+def get_result2():
+    file = request.files.get('file')
+    filename = file.filename
+    file_path = os.path.join('data', filename)
+    file.save(file_path)
+    data = get_data_from_csv(file_path)
+    model = Model('tfidf', 'RandomForestClassifier')
+    result = model.get_result(data)
+    print(result)
     response = {
-        'code': 0,
-        'data': req
+        "result": result
     }
-    return json.dumps(response)
+    # return json.dumps(response, ensure_ascii=False)
+    return jsonify(response)
 
+@app.route('/get_result_count_l', methods=['GET', 'POST'])
+def get_result3():
+    file = request.files.get('file')
+    filename = file.filename
+    file_path = os.path.join('data', filename)
+    file.save(file_path)
+    data = get_data_from_csv(file_path)
+    model = Model('count', 'LogisticRegression')
+    result = model.get_result(data)
+    print(result)
+    response = {
+        "result": result
+    }
+    # return json.dumps(response, ensure_ascii=False)
+    return jsonify(response)
+
+@app.route('/get_result_count_r', methods=['GET', 'POST'])
+def get_result4():
+    file = request.files.get('file')
+    filename = file.filename
+    file_path = os.path.join('data', filename)
+    file.save(file_path)
+    data = get_data_from_csv(file_path)
+    model = Model('count', 'RandomForestClassifier')
+    result = model.get_result(data)
+    print(result)
+    response = {
+        "result": result
+    }
+    # return json.dumps(response, ensure_ascii=False)
+    return jsonify(response)
 
 if __name__ == '__main__':
     app.config['JSON_AS_ASCII'] = False

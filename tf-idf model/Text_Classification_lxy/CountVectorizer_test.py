@@ -42,10 +42,11 @@ def lxy_random_forest():
 def main():
     data_path = "./data/train.csv"
     data, features, targets = read_data(data_path)
-    # vectorizer = CountVectorizer(analyzer='word', tokenizer=None, preprocessor=None, stop_words=None, max_features=5000)
-    vectorizer = joblib.load(filename='model/count_model/vectorizer.model')
-    # joblib.dump(filename="model/count_model/vectorizer.model", value=vectorizer)
-    # all_feature = vectorizer.fit_transform(data)
+    vectorizer = CountVectorizer(analyzer='word', tokenizer=None, preprocessor=None, stop_words=None, max_features=5000)
+    # vectorizer = joblib.load(filename='model/count_model/vectorizer.model')
+    all_feature = vectorizer.fit_transform(data)
+    joblib.dump(filename="model/count_model/vectorizer.model", value=vectorizer)
+    sys.exit(0)
     # all_feature = all_feature.toarray()
     # print(all_feature.shape)
     # with open('model/count_feature.csv', 'a') as f:

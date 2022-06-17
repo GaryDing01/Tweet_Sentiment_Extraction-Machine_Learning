@@ -209,7 +209,7 @@ import SidePer from '@/components/People_new/SidePer';
       this.loading=true;
       var that=
       this;
-      that.$axios.post("http://127.0.0.1:5000/get_result",formData,config).then(function(response){
+      that.$axios.post("http://127.0.0.1:5000/get_result_tfidf_l",formData,config).then(function(response){
         that.loading=false;
         console.log(response)
         alert(response.status)
