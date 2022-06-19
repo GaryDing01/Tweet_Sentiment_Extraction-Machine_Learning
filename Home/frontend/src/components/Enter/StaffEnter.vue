@@ -34,77 +34,18 @@
       background-color="#394f69"
       text-color="#fff"
       >
-      
-      <!-- active-text-color="#ffd04b" -->
 
-      <!-- <el-submenu index="00">
-        <template slot="title">
-          <span>个人信息</span>
-        </template>
-          <el-menu-item index="/Calendar">员工日历</el-menu-item>
-          <el-menu-item index="/test_p">测试</el-menu-item>
-          <el-menu-item index="/test_p2">测试2</el-menu-item>
-      </el-submenu> -->
+          <el-menu-item index="/History"><i class="el-icon-s-order"></i>项目背景</el-menu-item>
 
-      <!-- <el-submenu index="01"> -->
-        <!-- <template slot="title"> -->
-          <!-- <i class="el-icon-location"></i> -->
-          <!-- <span>订单管理</span> -->
-        <!-- </template> -->
-          <!-- <el-menu-item index="/Ongoing">订单修改</el-menu-item> -->
-          <el-menu-item index="/History"><i class="el-icon-s-order"></i>查看订单</el-menu-item>
-      <!-- </el-submenu> -->
+          <el-menu-item index='/Reservation/AllReservationPage'><i class="el-icon-bell"></i>项目思路</el-menu-item>
 
-      <!-- <el-submenu index="02"> -->
-        <!-- <template slot="title"> -->
-          <!-- <i class="el-icon-location"></i> -->
-          <!-- <span>预约管理</span> -->
-        <!-- </template> -->
-          <el-menu-item index='/Reservation/AllReservationPage'><i class="el-icon-bell"></i>预约管理</el-menu-item>
-          <!-- <el-menu-item index="/History">查看订单</el-menu-item> -->
-      <!-- </el-submenu> -->
+          <el-menu-item index="/NewTable1"><i class="el-icon-eleme"></i>项目笔记</el-menu-item>
 
+          <el-menu-item index="/NewDish1"><i class="el-icon-menu"></i>项目讨论</el-menu-item>
 
-        <!-- <el-submenu index="03">
-        <template slot="title">
-          <span>餐桌管理</span>
-        </template> -->
-          <el-menu-item index="/NewTable1"><i class="el-icon-eleme"></i>餐桌管理</el-menu-item>
-          <!-- <el-menu-item index="/Table2">查看指定餐桌使用情况</el-menu-item>
-          <el-menu-item index="/Table3">查找可用餐桌</el-menu-item>
-          <el-menu-item index="/Table4">修改餐桌使用状态</el-menu-item> -->
-        <!-- </el-submenu> -->
+          <el-menu-item index="/VIP200"><i class="el-icon-s-custom"></i>项目分析</el-menu-item>
 
-        <!-- <el-submenu index="04">
-        <template slot="title">
-          <span>菜单管理</span>
-        </template> -->
-          <el-menu-item index="/NewDish1"><i class="el-icon-menu"></i>菜品管理</el-menu-item>
-          <!-- <el-menu-item index="/Dish2">查询指定菜品的信息</el-menu-item>
-          <el-menu-item index="/Dish3">添加菜品</el-menu-item> -->
-        <!-- </el-submenu> -->
-
-        <!-- <el-submenu index="05" >
-        <template slot="title">
-          <span>会员管理</span>
-        </template> -->
-          <el-menu-item index="/VIP200"><i class="el-icon-s-custom"></i>会员管理</el-menu-item>
-        <!-- </el-submenu> -->
-
-        <!-- <el-submenu index="06"> -->
-        <!-- <template slot="title"> -->
-          <!-- <i class="el-icon-location"></i> -->
-          <!-- <span>员工管理</span> -->
-        <!-- </template> -->
-          <el-menu-item index="/AllManagement"><i class="el-icon-info"></i>员工管理</el-menu-item>
-          <!-- <el-menu-item index="/StaffSearch">员工信息查找</el-menu-item> -->
-          <!-- <el-menu-item index="/StaffRewrite">员工信息修改</el-menu-item> -->
-          <!-- <el-menu-item index="/StaffManagement">员工信息管理</el-menu-item> -->
-        <!-- </el-submenu> -->
-
-        <el-menu-item index="/StatementManage"><i class="el-icon-s-data"></i>流水管理</el-menu-item>
-        <el-menu-item index="/CRUD_Ingredient"><i class="el-icon-s-data"></i>食材管理</el-menu-item>
-        <el-menu-item index="/CRUD_Utensil"><i class="el-icon-s-data"></i>器材管理</el-menu-item>
+          <el-menu-item index="/AllManagement"><i class="el-icon-info"></i>项目实现</el-menu-item>
 
     </el-menu>
           </el-aside>
@@ -198,7 +139,7 @@
 
     data () {
       return {
-        title: "欢迎来到和平饭店",
+        title: "推特情感分类",
         requester_ID:'',
         dialogVisible:false,
         dialogVisiblePwd:false,

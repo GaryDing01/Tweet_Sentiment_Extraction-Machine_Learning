@@ -20,10 +20,69 @@
         </el-col> -->
 
         <!-- 机器学习上传文件 -->
-        <div style="">
+        <!-- <div style="">
           <input style="color:#000FFF;" type="file" @change="getFile($event)">
           <el-button style="margin-left:10px;z-index:99999;" size="small" type="primary" @click="batchPredict($event)">开始预测</el-button>
+        </div> -->
+
+        <!-- <div style="margin: 10vh 25vh;"> -->
+
+        <el-row style="margin-top:60px;margin-right:0px;">
+          <el-col
+              v-for="(item,index) in blogContent"
+              :key="item"
+              :span="4"
+              :offset="index %4 !==0 ? 2 : 0"
+              >
+            <el-card shadow="hover" :body-style="{ padding: '0px' }"  style="width:125%;height:300px;">
+              <img
+                  :src="item.picPath"
+                  class="image"
+                  style="width:80%;"
+              />
+              <div style=" text-align: center">
+                <h3>{{item.text}}</h3>
+              </div>
+              <div style="text-align: center;">
+                <input style="color:#000FFF;margin-left:45px;" type="file" @change="getFile($event)">
+                <el-button style="margin-top:10px;" size="small" type="primary" @click="batchFilter($event,item.text)">开始预测</el-button>
+              </div>
+            </el-card>
+          </el-col>
+        </el-row>
+
+        <div style="position:absolute;top:120px;z-index:1050;left:450px;">
+            <el-card v-show="showResult" style="background-color: black;">
+            <p style="color:white;font-size:20px;">测试结果</p>
+            <el-table
+                :data="tableData"
+                border
+                style="width: 100%">
+                <el-table-column
+                  prop="num"
+                  label="No."
+                  width="90">
+                </el-table-column>
+                <el-table-column
+                  prop="text"
+                  label="Text"
+                  width="380">
+                </el-table-column>
+                <el-table-column
+                  prop="truth"
+                   width="180"
+                  label="Ground Truth">
+                </el-table-column>
+                <el-table-column
+                  prop="test"
+                   width="180"
+                  label="Test Result">
+                </el-table-column>
+            </el-table>
+            <el-button style="margin-left:0px;margin-top:20px;" size="medium" type="primary" @click="closeTest()">关闭</el-button>
+            </el-card>
         </div>
+
 </div>
 </template>
 
@@ -57,14 +116,84 @@ import SidePer from '@/components/People_new/SidePer';
         file:"",
         batchPredictVisible:false,
         loading:false,
-        tableData:{},
+        resultData:{},
+        tableData:[
+          {
+            num:1,
+            text:"Last session of the day  http://twitpic.com/67ezh",
+            truth:'neutral',
+            test:'neutral',
+          },
+          {
+            num:2,
+            text:"Shanghai is also really exciting (precisely -- skyscrapers galore). Good tweeps in China:  (SH)  (BJ).",
+            truth:'positive',
+            test:'neutral',
+          },
+          {
+            num:3,
+            text:"Recession hit Veronique Branquinho, she has to quit her company, such a shame!",
+            truth:'negative',
+            test:'neutral',
+          },
+          {
+            num:4,
+            text:"happy bday!",
+            truth:'positive',
+            test:'neutral',
+          },
+          {
+            num:5,
+            text:"http://twitpic.com/4w75p - I like it!!",
+            truth:'positive',
+            test:'neutral',
+          },
+          {
+            num:6,
+            text:"that`s great!! weee!! visitors!",
+            truth:'positive',
+            test:'neutral',
+          },
+          {
+            num:7,
+            text:"I THINK EVERYONE HATES ME ON HERE   lol",
+            truth:'negative',
+            test:'neutral',
+          },
+          {
+            num:8,
+            text:"soooooo wish i could, but im in school and myspace is completely blocked",
+            truth:'negative',
+            test:'neutral',
+          },
+          {
+            num:9,
+            text:"and within a short time of the last clue all of them",
+            truth:'neutral',
+            test:'neutral',
+          },
+          {
+            num:10,
+            text:"What did you get?  My day is alright.. haven`t done anything yet. leaving soon to my stepsister though!",
+            truth:'neutral',
+            test:'neutral',
+          },
+        ],
         total:0,
+        blogContent:[
+          {picPath: require("../../assets/TL1.png"), text:"TF-IDF+LR", turnRoute:""},
+          {picPath: require("../../assets/TR1.png"), text:"TF-IDF+RF", turnRoute:""},
+          {picPath: require("../../assets/CL1.png"), text:"Count+LR", turnRoute:""},
+          {picPath: require("../../assets/CR1.png"), text:"Count+RF", turnRoute:""},
+      ],
+      showResult:true,
       };
     },
 
      mounted(){
         //this.showper();
         //this.perPicture();
+        this.showResult=false;
     },
 
     methods: {
@@ -192,7 +321,7 @@ import SidePer from '@/components/People_new/SidePer';
 
     getFile(event){
       this.file=event.target.files[0];
-      alert(this.file);
+      // alert(this.file);
     },
 
     batchPredict(event){
@@ -215,14 +344,45 @@ import SidePer from '@/components/People_new/SidePer';
         alert(response.status)
         if(response.status===200){
           // that.tableData=(JSON.parse(response.data))
-          that.tableData=response.data
-          alert(that.tableData.result)
-          // that.total=that.tableData.length
+          that.resultData=response.data
+          console.log("这里")
+          console.log(that.resultData)
+          alert(that.resultData.accuracy)
+
+          // 给表格赋值
+          for (let i=0;i<10;i++){
+            that.tableData[i].text=that.resultData.text[i];
+            that.tableData[i].truth=that.resultData.ground[i];
+            that.tableData[i].test=that.resultData.result[i];
+          }
+          
+          that.showResult=true;
         }
       }).catch(err =>{
+        alert("错误！")
         this.$message.error(err.message);
         alert(err);
       })
+    },
+
+    batchFilter(event,text)
+    {
+      if (text=="TF-IDF+LR"){
+        this.batchPredict(event)
+      }
+      else if (text=="TF-IDF+RF"){
+        this.batchPredict(event)
+      }
+      else if (text=="Count+LR"){
+        this.batchPredict(event)
+      }
+      else if (text=="Count+RF"){
+        this.batchPredict(event)
+      }
+    },
+
+    closeTest(){
+      this.showResult=false;
     }
 
   }
